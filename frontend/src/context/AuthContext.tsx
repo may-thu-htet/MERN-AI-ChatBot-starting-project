@@ -22,6 +22,9 @@ type UserAuth = {
 };
 
 const AuthContext = createContext<UserAuth | null>(null);
+
+export const useAuth = () => useContext(AuthContext);
+
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -30,17 +33,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     // fetch if the user's cookie is valid then skip login
   }, []);
 
+  const signup = async (name: string, email: string, password: string) => {
+    setIsLoggedIn(true);
+  };
+
   const login = async (email: string, password: string) => {
+    console.log(email, password);
     const data = await loginUser(email, password);
+    console.log(data);
     if (data) {
       setUser({ name: data.name, email: data.email });
       setIsLoggedIn(true);
     }
   };
 
-  const signup = async (name: string, email: string, password: string) => {
-    setIsLoggedIn(true);
-  };
   const logout = async () => {
     setIsLoggedIn(false);
     setUser(null);
@@ -55,5 +61,3 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
-
-export const useAuth = () => useContext(AuthContext);
