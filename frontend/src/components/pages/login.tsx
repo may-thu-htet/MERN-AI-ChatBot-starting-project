@@ -10,9 +10,9 @@ axios.defaults.baseURL = "http://localhost:5000/api/v1";
 axios.defaults.withCredentials = true;
 
 const Login = () => {
+  const auth = useAuth();
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const auth = useAuth();
     const formdata = new FormData(e.currentTarget);
     const email = formdata.get("email") as string;
     const password = formdata.get("password") as string;
