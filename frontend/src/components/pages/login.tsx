@@ -3,17 +3,28 @@ import { IoIosLogIn } from "react-icons/io";
 import React from "react";
 import CustomizedInput from "../shared/CustomizedInput";
 import axios from "axios";
+import { useAuth } from "../../context/AuthContext";
+import toast from "react-hot-toast";
 
 axios.defaults.baseURL = "http://localhost:5000/api/v1";
 axios.defaults.withCredentials = true;
 
 const Login = () => {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const auth = useAuth();
     const formdata = new FormData(e.currentTarget);
-    const email = formdata.get("email");
-    const password = formdata.get("password");
-    console.log(email, password);
+    const email = formdata.get("email") as string;
+    const password = formdata.get("password") as string;
+    try {
+      toast.loading("Logging in", { id: "login" });
+      await auth?.login(email, password);
+      toast.success("Logged in successfully", { id: "loggedin" });
+    } catch (error) {
+      console.log(error);
+
+      toast.error("Fail to log in", { id: "loginFailed" });
+    }
   };
   return (
     <Box width={"100%"} height={"100%"} display={"flex"} flex={1}>
