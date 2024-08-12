@@ -23,6 +23,7 @@ const Login = () => {
             padding: "30px",
             boxShadow: "10px 10px 20px #000",
             border: "none",
+            borderRadius: "10px",
           }}
         >
           <Box
