@@ -2,6 +2,10 @@ import { Box, Typography, Button } from "@mui/material";
 import { IoIosLogIn } from "react-icons/io";
 import React from "react";
 import CustomizedInput from "../shared/CustomizedInput";
+import axios from "axios";
+
+axios.defaults.baseURL = "http://localhost:5000/api/v1";
+axios.defaults.withCredentials = true;
 
 const Login = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
