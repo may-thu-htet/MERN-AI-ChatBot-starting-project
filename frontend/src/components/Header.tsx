@@ -1,10 +1,14 @@
 import React from "react";
+import { AppBar } from "@mui/material";
+import Toolbar from "@mui/material/Toolbar";
 
 const Header = () => {
   return (
-    <div>
-      <h1>Header</h1>
-    </div>
+    <AppBar
+      sx={{ bgcolor: "transparent", position: "static", boxShadow: "none" }}
+    >
+      <Toolbar sx={{ display: "flex" }}></Toolbar>
+    </AppBar>
   );
 };
 
