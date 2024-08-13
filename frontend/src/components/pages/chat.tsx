@@ -1,7 +1,34 @@
-import { Avatar, Box, Typography, Button } from "@mui/material";
+import { Avatar, Box, Typography, Button, IconButton } from "@mui/material";
 import red from "@mui/material/colors/red";
 import React from "react";
 import { useAuth } from "../../context/AuthContext";
+import ChatItem from "../chat/ChatItem";
+import { IoMdSend } from "react-icons/io";
+
+const chatMessages = [
+  { role: "user", content: "What's the weather like today?" },
+  {
+    role: "assistant",
+    content:
+      "I currently don't have access to real-time data, but you can check a weather app or website for the latest update.",
+  },
+
+  { role: "user", content: "Can you help me with a math problem?" },
+  {
+    role: "assistant",
+    content: "Of course! What math problem do you need help with?",
+  },
+
+  { role: "user", content: "What's the capital of France?" },
+  { role: "assistant", content: "The capital of France is Paris." },
+
+  { role: "user", content: "Tell me a fun fact." },
+  {
+    role: "assistant",
+    content:
+      "Did you know that honey never spoils? Archaeologists have found pots of honey in ancient Egyptian tombs that are over 3,000 years old and still perfectly edible!",
+  },
+];
 
 const Chat = () => {
   const auth = useAuth();
@@ -105,7 +132,41 @@ const Chat = () => {
             overflowY: "auto",
             scrollBehavior: "smooth",
           }}
-        ></Box>
+        >
+          {chatMessages.map((chat, index) => (
+            <ChatItem
+              content={chat.content}
+              role={chat.role as "user" | "assistant"}
+              key={index}
+            />
+          ))}
+        </Box>
+        <div
+          style={{
+            width: "100%",
+            padding: "20px",
+            borderRadius: 8,
+            backgroundColor: "rgb(17, 27,39)",
+            display: "flex",
+            margin: "auto",
+          }}
+        >
+          <input
+            type="text"
+            style={{
+              width: "100%",
+              backgroundColor: "transparent",
+              padding: "10px",
+              border: "none",
+              outline: "none",
+              color: "white",
+              fontSize: "20px",
+            }}
+          ></input>
+          <IconButton sx={{ ml: "auto", color: "white" }}>
+            <IoMdSend />
+          </IconButton>
+        </div>
       </Box>
     </Box>
   );
