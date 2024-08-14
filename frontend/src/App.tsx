@@ -1,12 +1,15 @@
 import Header from "./components/Header";
 import { Routes, Route } from "react-router-dom";
-import Chat from "./components/pages/chat";
-import Home from "./components/pages/home";
-import Login from "./components/pages/login";
+
 import Signup from "./components/pages/Signup";
 import NotFound from "./components/pages/NotFound";
+import { useAuth } from "./context/AuthContext";
+import Home from "./components/pages/home";
+import Login from "./components/pages/login";
+import Chat from "./components/pages/chat";
 
 function App() {
+  const auth = useAuth();
   return (
     <main>
       <Header />
@@ -14,7 +17,9 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/chat" element={<Chat />} />
+        {auth?.isLoggedIn && auth.user && (
+          <Route path="/chat" element={<Chat />} />
+        )}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </main>
