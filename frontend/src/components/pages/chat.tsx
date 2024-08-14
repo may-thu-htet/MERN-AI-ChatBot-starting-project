@@ -4,6 +4,9 @@ import React, { useRef, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import ChatItem from "../chat/ChatItem";
 import { IoMdSend } from "react-icons/io";
+import { sendChatRequest } from "../../helpers/api-communicator";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { coldarkCold } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 type Message = {
   role: "user" | "assistant";
@@ -25,6 +28,9 @@ const Chat = () => {
       content,
     };
     setChatMessages((prev) => [...prev, newMessage]);
+
+    const chatData = await sendChatRequest(content);
+    setChatMessages([...chatData.chats]);
   };
 
   return (
