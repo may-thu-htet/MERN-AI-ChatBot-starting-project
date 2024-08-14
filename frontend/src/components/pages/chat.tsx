@@ -1,12 +1,13 @@
 import { Avatar, Box, Typography, Button, IconButton } from "@mui/material";
 import red from "@mui/material/colors/red";
-import React, { useRef, useState } from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import ChatItem from "../chat/ChatItem";
 import { IoMdSend } from "react-icons/io";
-import { sendChatRequest } from "../../helpers/api-communicator";
+import { getUserChat, sendChatRequest } from "../../helpers/api-communicator";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { coldarkCold } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { toast } from "react-hot-toast";
 
 type Message = {
   role: "user" | "assistant";
@@ -32,6 +33,21 @@ const Chat = () => {
     const chatData = await sendChatRequest(content);
     setChatMessages([...chatData.chats]);
   };
+
+  useLayoutEffect(() => {
+    if (auth?.isLoggedIn && auth.user) {
+      toast.loading("loading chats", { id: "loadchats" });
+      getUserChat()
+        .then((data) => {
+          setChatMessages([...data.chats]);
+          toast.success("successfully loaded chats", { id: "loadchats" });
+        })
+        .catch((err) => {
+          console.log(err);
+          toast.error("Loading failed", { id: "loadchats" });
+        });
+    }
+  }, [auth]);
 
   return (
     <Box
