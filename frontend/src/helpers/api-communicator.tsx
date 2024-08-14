@@ -37,3 +37,23 @@ export const getUserChat = async () => {
   const data = await res.data;
   return data;
 };
+
+export const deleteUserChat = async () => {
+  const res = await axios.delete("/chat/delete ");
+  console.log(res);
+  if (res.status !== 200) {
+    throw new Error("Unable to delete chat");
+  }
+  const data = await res.data;
+  return data;
+};
+
+export const logoutUser = async () => {
+  const res = await axios.get("/user/logout ");
+  console.log(res);
+  if (res.status !== 200) {
+    throw new Error("Unable to log out");
+  }
+  const data = await res.data;
+  return data;
+};

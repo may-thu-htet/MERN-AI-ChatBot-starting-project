@@ -1,13 +1,16 @@
 import { Avatar, Box, Typography, Button, IconButton } from "@mui/material";
 import red from "@mui/material/colors/red";
-import React, { useLayoutEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import ChatItem from "../chat/ChatItem";
 import { IoMdSend } from "react-icons/io";
-import { getUserChat, sendChatRequest } from "../../helpers/api-communicator";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { coldarkCold } from "react-syntax-highlighter/dist/esm/styles/prism";
+import {
+  deleteUserChat,
+  getUserChat,
+  sendChatRequest,
+} from "../../helpers/api-communicator";
 import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 type Message = {
   role: "user" | "assistant";
@@ -15,6 +18,7 @@ type Message = {
 };
 
 const Chat = () => {
+  const navigate = useNavigate();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const auth = useAuth();
   const [chatMessages, setChatMessages] = useState<Message[]>([]);
@@ -34,6 +38,18 @@ const Chat = () => {
     setChatMessages([...chatData.chats]);
   };
 
+  const handleDeleteChat = async () => {
+    try {
+      toast.loading("deleting chats", { id: "deletechats" });
+      await deleteUserChat();
+      setChatMessages([]);
+      toast.success("deleted chats successfully", { id: "deletechats" });
+    } catch (error) {
+      console.log(error);
+      toast.error("failed to delete chats", { id: "deletechats" });
+    }
+  };
+
   useLayoutEffect(() => {
     if (auth?.isLoggedIn && auth.user) {
       toast.loading("loading chats", { id: "loadchats" });
@@ -46,6 +62,12 @@ const Chat = () => {
           console.log(err);
           toast.error("Loading failed", { id: "loadchats" });
         });
+    }
+  }, [auth]);
+
+  useEffect(() => {
+    if (!auth?.user) {
+      return navigate("/login");
     }
   }, [auth]);
 
@@ -99,6 +121,7 @@ const Chat = () => {
             information.
           </Typography>
           <Button
+            onClick={handleDeleteChat}
             sx={{
               width: "200px",
               my: "auto",
